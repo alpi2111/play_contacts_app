@@ -1,7 +1,8 @@
-package com.example.playcontacts
+package com.example.playcontacts.ui.home
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.playcontacts.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
