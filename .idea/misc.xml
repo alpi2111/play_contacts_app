@@ -4,10 +4,13 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/drawable/custom_color_button_rounded.xml" value="0.1" />
+        <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/drawable/custom_round_avatar.xml" value="0.1135" />
         <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/activity_main.xml" value="0.2503457814661134" />
+        <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/avatar.xml" value="1.0" />
         <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/item_user.xml" value="0.2503457814661134" />
         <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/loading_dialog_helper.xml" value="0.1" />
+        <entry key="..\:/Users/Alpirez/AndroidStudioProjects/PlayContacts/app/src/main/res/layout/selectable_item.xml" value="0.18" />
       </map>
     </option>
   </component>
