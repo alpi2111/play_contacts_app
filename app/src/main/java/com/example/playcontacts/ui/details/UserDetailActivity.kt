@@ -17,6 +17,12 @@ import com.example.playcontacts.R
 import com.example.playcontacts.helpers.FunctionsHelper
 import com.example.playcontacts.helpers.ModalHelper
 import com.example.playcontacts.models.User
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.MarkerOptions
 
 class UserDetailActivity : AppCompatActivity() {
 
@@ -60,6 +66,14 @@ class UserDetailActivity : AppCompatActivity() {
         tvName.text = user.phone
         tvEmail.text = user.email
 
+        val mapFragment = supportFragmentManager.findFragmentById(
+            R.id.map_fragment
+        ) as? SupportMapFragment
+        mapFragment?.getMapAsync { googleMap ->
+            addMarkers(googleMap)
+        }
+
+
         btnCall.setOnClickListener {
             onCall()
         }
@@ -74,7 +88,11 @@ class UserDetailActivity : AppCompatActivity() {
                     startActivity(intent)
                 }
             } catch (ex: ActivityNotFoundException) {
-                ModalHelper.showToast(this@UserDetailActivity, "No tienes una app de correo. Descarga alguna", true)
+                ModalHelper.showToast(
+                    this@UserDetailActivity,
+                    "No tienes una app de correo. Descarga alguna",
+                    true
+                )
             }
         }
 
@@ -115,11 +133,23 @@ class UserDetailActivity : AppCompatActivity() {
         } else {
             startActivity(
                 Intent(Intent.ACTION_CALL)
-                    .setData(
-                        Uri.parse("tel:${user.phone}")
-                    )
+                    .setData(Uri.parse("tel:${user.phone}"))
                     .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             )
         }
     }
+
+    private fun addMarkers(googleMap: GoogleMap) {
+        val geo = user.address.geo
+        val latLng = LatLng(geo.lat.toDouble(), geo.lng.toDouble())
+        googleMap.setOnMapLoadedCallback {
+            val bounds = LatLngBounds.builder()
+            bounds.include(latLng)
+            googleMap.addMarker(
+                MarkerOptions().title(user.company.name).position(latLng)
+            )
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds.build(), 20))
+        }
+    }
+
 }
