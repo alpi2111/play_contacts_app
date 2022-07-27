@@ -3,6 +3,7 @@ package com.example.playcontacts.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,7 @@ class MainActivity : AppCompatActivity(), Observer {
         btnLogout = findViewById(R.id.iv_logout)
         cpiLoading = findViewById(R.id.cpi_loading)
         rvUsers = findViewById(R.id.rv_users)
-        usersAdapter = ItemUsersAdapter(applicationContext)
+        usersAdapter = ItemUsersAdapter(this@MainActivity)
         rvUsers.adapter = usersAdapter
 
 
@@ -62,13 +63,15 @@ class MainActivity : AppCompatActivity(), Observer {
         }
 
         if (allUsers != null) {
-            usersAdapter = ItemUsersAdapter(applicationContext, allUsers)
+            usersAdapter = ItemUsersAdapter(this@MainActivity, allUsers)
             rvUsers.adapter = usersAdapter
             val dividerItemDecoration = DividerItemDecoration(
                 rvUsers.context,
                 DividerItemDecoration.VERTICAL
             )
             rvUsers.addItemDecoration(dividerItemDecoration)
+            rvUsers.animation = AnimationUtils.loadAnimation(applicationContext, android.R.anim.fade_in)
+            cpiLoading.animation = AnimationUtils.loadAnimation(applicationContext, android.R.anim.fade_out)
             cpiLoading.visibility = View.GONE
             rvUsers.visibility = View.VISIBLE
         }

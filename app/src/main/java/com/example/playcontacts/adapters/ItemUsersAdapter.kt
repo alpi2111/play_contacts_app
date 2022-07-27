@@ -1,6 +1,8 @@
 package com.example.playcontacts.adapters
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,7 @@ import com.example.playcontacts.R
 import com.example.playcontacts.helpers.FunctionsHelper
 import com.example.playcontacts.models.User
 import com.example.playcontacts.models.UsersResponseModel
+import com.example.playcontacts.ui.details.UserDetailActivity
 
 class ItemUsersAdapter(
     private val context: Context,
@@ -30,7 +33,11 @@ class ItemUsersAdapter(
         Log.i("pos", position.toString() + "")
         val user: User = users!![position]
 
-        holder.lyUser.setOnClickListener {  }
+        holder.lyUser.setOnClickListener {
+            val intent = Intent(context, UserDetailActivity::class.java)
+            intent.putExtra("user", user)
+            (context as Activity).startActivity(intent)
+        }
         holder.tvName.text = user.name
         holder.tvEmail.text = user.email
         holder.tvLetter.visibility = View.GONE
