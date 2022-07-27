@@ -1,0 +1,7 @@
+# play_contacts_app
+
+MAPS API KEY= AIzaSyCcH7HnpCHziwv7ghI9mbqtgvPYJNXA1rE
+
+local.properties
+
+GOOGLE_MAPS_API_KEY=AIzaSyCcH7HnpCHziwv7ghI9mbqtgvPYJNXA1rE
