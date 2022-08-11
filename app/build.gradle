@@ -4,6 +4,16 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+import javax.crypto.Cipher
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.PrivateKey
+import java.security.PublicKey
+import org.json.JSONObject
+
+PrivateKey privateKey
+PublicKey publicKey
+
 android {
     compileSdk 32
 
@@ -53,3 +63,70 @@ dependencies {
     // maps
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
 }
+
+tasks.register("aaa") {
+    it.doFirst {
+        // exec {
+        System.out.println("Fi")
+
+        KeyPairGenerator generator = KeyPairGenerator.getInstance("RSA")
+        generator.initialize(1024)
+        KeyPair pair = generator.generateKeyPair()
+        privateKey = pair.getPrivate()
+        publicKey = pair.getPublic()
+
+        FileReader fr = new FileReader("app/src/main/assets/testJs.json")
+        int character;
+        String text = "";
+
+        while ((character = fr.read()) != -1) {
+            text += (char) character
+        }
+        fr.close();
+        System.out.println("text is " + text)
+        JSONObject json = new JSONObject(text)
+        String word = json.get("key")
+
+        String encryptedMessage = encrypt(word, publicKey);
+        System.err.println("Encrypted:\n"+encryptedMessage);
+        FileWriter fw = new FileWriter("app/src/main/assets/testJs.json")
+        fw.write(encryptedMessage)
+        fw.close()
+
+        project(":app").tasks.getByName("assembleDebug").doLast {
+            Thread.sleep(10000)
+            System.out.println("bl")
+            String decryptedMessage = decrypt(encryptedMessage, privateKey);
+            System.err.println("Decrypted:\n"+decryptedMessage);
+            FileWriter fw2 = new FileWriter("app/src/main/assets/testJs.json")
+            fw2.write(decryptedMessage)
+            fw2.close()
+        }
+    }
+}
+
+static def encode(byte[] data) {
+    return Base64.getEncoder().encodeToString(data)
+}
+
+static def encrypt(String message, PublicKey pk) {
+    byte[] messageToBytes = message.getBytes()
+    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
+    cipher.init(Cipher.ENCRYPT_MODE, pk)
+    byte[] encryptedBytes = cipher.doFinal(messageToBytes)
+    return encode(encryptedBytes)
+}
+
+static String decrypt(String encryptedMessage, PrivateKey pk) {
+    byte[] encryptedBytes = decode(encryptedMessage)
+    Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding")
+    cipher.init(Cipher.DECRYPT_MODE, pk)
+    byte[] decryptedMessage = cipher.doFinal(encryptedBytes)
+    return new String(decryptedMessage, "UTF8")
+}
+
+static byte[] decode(String data) {
+    return Base64.getDecoder().decode(data)
+}
+
+project(":app").tasks.preBuild.dependsOn("aaa")
